@@ -50,7 +50,18 @@ application.get('/', function (request,response) {
     var robot = await database.collection('robots').find({}).toArray();
     database.close();
     //response.json(robot);
-    response.render('index' ,{ users: robot[users: robot(id)]} );
+    response.render('index' ,{ users: robot });
+  });
+});
+
+application.get('/:id', function (request,response) {
+  // response.send('hello');
+  var id = parseInt(request.params.id);
+  MongoClient.connect(url, async function(error,database){
+    var robot = await database.collection('robots').find({id:id}).toArray();
+    database.close();
+    //response.json(robot);
+    response.render('index' ,{ users: robot });
   });
 });
 
