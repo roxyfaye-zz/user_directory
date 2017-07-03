@@ -20,8 +20,12 @@
 const express = require('express');
 const mustacheExpress = require('mustache-express');
 const application = express();
-const robot = require('./controllers/robot_controller');
-const robots = require('./controllers/robots_controller');
+// const robot = require('./controllers/robot_controller');
+// const robots = require('./controllers/robots_controller');
+const MongoClient = require('mongodb').MongoClient
+  , assert = require('assert');
+
+var url = 'mongodb://localhost:27017/robots';  
 
 
 application.engine('mustache', mustacheExpress());
@@ -30,8 +34,28 @@ application.set('view engine', 'mustache' );
 
 
 
-application.use(robots);
-application.use(robot);
+// application.use(robots);
+//application.use(robot);
+
+MongoClient.connect(url, function(err, database) {
+  assert.equal(null, err);
+  console.log("Connected correctly to server");
+ 
+  database.close();
+});
+
+application.get('/', function (request,response) {
+  // response.send('hello');
+  MongoClient.connect(url, async function(error,database){
+    var robot = await database.collection('robots').find({}).toArray();
+    database.close();
+    //response.json(robot);
+    response.render('index' ,{ users: robot });
+  });
+});
+
+
+
 
 application.listen(3000, function(){
     console.log('server running!')
