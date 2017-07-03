@@ -50,7 +50,7 @@ application.get('/', function (request,response) {
     var robot = await database.collection('robots').find({}).toArray();
     database.close();
     //response.json(robot);
-    response.render('index' ,{ users: robot });
+    response.render('index' ,{ users: robot[users: robot(id)]} );
   });
 });
 
