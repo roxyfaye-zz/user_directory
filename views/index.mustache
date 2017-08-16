@@ -1,27 +1,59 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta charset="utf-8">
-    <link rel="stylesheet" type="text/css" href="public/styles.css">
-    <title>Robots Need Jobs</title>
-  </head>
-  <body>
-    <div>
-     <!--{"id":1,"username":"hjuza0","name":"Hamlen Juza","avatar":"https://robohash.org/blanditiisexercitationemquaerat.png?size=150x150&set=set1","email":"hjuza0@blogger.com","university":"Pomor State University","job":"Engineer IV","company":"Stark, Feil and Bode","skills":["DMVPN","HDX","Rhino 3D"],"phone":"7-(397)813-7803","address":{"street_num":"78226","street_name":"Ryan","city":"Kamennogorsk","state_or_province":null,"postal_code":"188950","country":"Russia"}}, -->
 
-    {{#users}}
-    
-      <img src={{avatar}}>
-           <a href="{{id}}"><h3>{{name}}</h3></a>
-      
-      {{#job}}
-        <div class="job">{{job}}</div>
-      {{/job}}
-      {{^job}}
-      <p>needs a job</p>
-      {{/job}}
-      <div>{{  }}</div>
-    {{/users}}
+<head>
+  <meta charset="utf-8">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" />
+  <link rel="stylesheet" type="text/css" href="./styles.css" />
+  <title>Robots Need Jobs</title>
+</head>
+
+<body>
+  <div class="jumbotron">
+    <h1 class="display-3">Linkedin for the Robot Community</h1>
+    <p class="lead">These robots have all the swag. Manage your professional robot identity. Build and engage with your professional network.
+      Access knowledge, insights and opportunities..</p>
+    <hr class="my-4">
+    <p>500 million+ bot members</p>
+    <p class="lead">
+      <a class="btn btn-primary btn-lg" href="#" role="button">Learn more</a>
+    </p>
+  </div>
+  <ul class="nav">
+    <li class="nav-item">
+      <a class="nav-link active" href="/">Home</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" href="/employed">Already Employeed</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" href="/needsajob">For Hire</a>
+    </li>
+  </ul>
+  <div class="container">
+    <div class="row justify-content-around">
+      {{#users}}
+      <div class="col-sm-4">
+        <div class="card" style="width: 20rem; height: 320px;">
+          <img class="card-img-top" src="{{avatar}}" alt="Card image cap">
+          <div class="card-body">
+            <h4 class="card-title">
+              <a href="{{id}}">
+                <h3>{{name}}</h3>
+              </a>
+              <p class="card-text">{{email}}</p>
+              {{#job}}
+              <p class="card-text">{{.}}</p>
+              {{/job}} {{^job}}
+              <p class="card-text">Actively Seeking Work</p>
+              {{/job}}
+              <a href="#" class="btn btn-primary">Email this friendly bot</a>
+          </div>
+        </div>
+      </div>
+      {{/users}}
     </div>
-  </body>
+  </div>
+</body>
+
 </html>

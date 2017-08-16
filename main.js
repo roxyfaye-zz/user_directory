@@ -20,10 +20,8 @@
 const express = require('express');
 const mustacheExpress = require('mustache-express');
 const application = express();
-// const robot = require('./controllers/robot_controller');
-// const robots = require('./controllers/robots_controller');
-const MongoClient = require('mongodb').MongoClient
-  , assert = require('assert');
+const MongoClient = require('mongodb').MongoClient, assert = require('assert');
+
 
 var url = 'mongodb://localhost:27017/robots';  
 
@@ -31,11 +29,8 @@ var url = 'mongodb://localhost:27017/robots';
 application.engine('mustache', mustacheExpress());
 application.set('views', './views');
 application.set('view engine', 'mustache' );
+application.use(express.static('public'));
 
-
-
-// application.use(robots);
-//application.use(robot);
 
 MongoClient.connect(url, function(err, database) {
   assert.equal(null, err);
@@ -45,28 +40,39 @@ MongoClient.connect(url, function(err, database) {
 });
 
 application.get('/', function (request,response) {
-  // response.send('hello');
   MongoClient.connect(url, async function(error,database){
     var robot = await database.collection('robots').find({}).toArray();
     database.close();
-    //response.json(robot);
     response.render('index' ,{ users: robot });
   });
 });
 
-application.get('/:id', function (request,response) {
+application.get('/employed', function (request,response) {
+  var id = parseInt(request.params.id);
+  MongoClient.connect(url, async function(error,database){
+    var robot = await database.collection('robots').find({job: { $ne: null}}).toArray();
+    database.close();
+    response.render('employed' ,{ users: robot });
+   });
+});
+
+application.get('/needsajob', function (request,response) {
   // response.send('hello');
   var id = parseInt(request.params.id);
   MongoClient.connect(url, async function(error,database){
-    var robot = await database.collection('robots').find({id:id}).toArray();
+    var robot = await database.collection('robots').find({job: null}).toArray();
     database.close();
-    //response.json(robot);
-    response.render('index' ,{ users: robot });
+    response.render('needsajob' ,{ users: robot });
   });
 });
 
-
-
+application.get('/:id', function (request, response) {
+    MongoClient.connect(url, async function(error,database){
+    var robot = await database.collection('robots').find({ id: parseInt(request.params.id)}).toArray();
+    database.close();
+    response.render('individual' ,{ users: robot });
+}); 
+    });
 
 application.listen(3000, function(){
     console.log('server running!')
